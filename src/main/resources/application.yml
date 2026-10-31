@@ -1,0 +1,17 @@
+server:
+  port: 9201                                    # 网关端口，前端只认这个
+spring:
+  application:
+    name: comment-gateway                       # 注册到 Nacos 的名字
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848             # Nacos 地址
+    gateway:
+      routes:
+        - id: comment_route                     # 路由 ID
+          uri: lb://feidian-comment             # 转发到注册名 feidian-comment 的服务
+          predicates:
+            - Path=/api/**                      # 匹配 /api 开头的请求
+          filters:
+            - StripPrefix=1                     # 去掉第一段 /api
